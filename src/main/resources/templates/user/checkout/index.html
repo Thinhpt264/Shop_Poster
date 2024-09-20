@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Checkout Form</title>
+	<!-- Bootstrap CSS -->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="styles.css">
+</head>
+<style>
+	h4 {
+		font-size: 1.25rem;
+		border-bottom: 2px solid #000;
+		padding-bottom: 0.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	/* Custom styles for input fields */
+	.form-control {
+		border-radius: 0;
+		border: 1px solid #ddd;
+	}
+
+	/* Custom styles for the order summary */
+	.order-summary {
+		border: 1px solid #ddd;
+		border-radius: 4px;
+	}
+
+	.order-summary .list-group-item {
+		border: none;
+	}
+</style>
+
+<body>
+	<div class="container my-5">
+		<!-- Billing Details Section -->
+		<form th:action="@{/checkout/payment}" method="post">
+			<section class="mb-5">
+				<h4 class="mb-4"><span class="font-weight-bold">1</span> Thông Tin Hóa Đơn</h4>
+
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="firstName">First Name *</label>
+						<input type="text" class="form-control" name="firstName" id="firstName"  required>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="lastName">Last Name *</label>
+						<input type="text" class="form-control" name="lastName" id="lastName" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="phone">Mobile Phone Number *</label>
+					<input type="tel" class="form-control" name="phone" id="phone" required>
+				</div>
+				<div class="form-group">
+					<label for="email">Email *</label>
+					<input type="email" class="form-control" name="email" id="email" required>
+				</div>
+				<div class="form-group">
+					<label for="country">Country *</label>
+					<select id="country" name="country"  class="form-control">
+						<option selected value="vi">Vietnam</option>
+						<option value="us">United States</option>
+						<option value="uk">United Kingdom</option>
+						<option value="fr">France</option>
+						<!-- Add more countries as needed -->
+					</select>
+				</div>
+				<div class="form-group" >
+					<label for="address1">Address 1 (Street name / House number / Floor) *</label>
+					<input type="text" name="address1" class="form-control" id="address1" required>
+				</div>
+				<div class="form-group">
+					<label for="address2">Address 2 (Additional address information)</label>
+					<input type="text" name="address2" class="form-control" id="address2">
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="postcode">Postcode/ZIP *</label>
+						<input type="text" name="postCode" class="form-control" id="postcode" required>
+					</div>
+
+				</div>
+				<div class="form-check">
+					<input type="checkbox" class="form-check-input" id="subscribeNewsletter">
+					<label class="form-check-label" for="subscribeNewsletter">Subscribe to our monthly newsletter with
+						interior inspiration, news and exclusive offers.</label>
+				</div>
+				<div class="form-check">
+					<input type="checkbox" class="form-check-input" id="differentAddress">
+					<label class="form-check-label" for="differentAddress">Ship to a different address?</label>
+				</div>
+				<div class="form-group mt-3">
+					<label for="orderNotes">Notes about your order:</label>
+					<textarea class="form-control" name="notes" id="orderNotes" rows="3"></textarea>
+				</div>
+			</section>
+
+			<!-- Order Summary Section -->
+			<section>
+				<h4 class="mb-4"><span class="font-weight-bold">2</span> Đơn Hàng Của Bạn</h4>
+				<div class="order-summary bg-light p-4">
+					<ul class="list-group mb-3">
+						<li class="list-group-item d-flex justify-content-between align-items-center"
+							th:each="item, i : ${cart}">
+							<span
+								th:text="${item.poster.name} + '-' + ${item.selected_size.name} + ' X' + ${item.quantity} ">Papillon
+								No. 2 - 30x40 cm x1</span>
+							<strong
+								th:text=" '$' + ((${item.poster.price} + ${item.selected_size.price} ) * ${item.quantity})">EUR
+								49.00</strong>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center" <span>Tổng Tiền
+							Sản Phẩm</span>
+							<strong th:text="'$' + ${total}">EUR 128.00</strong>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span>Shipping</span>
+							<strong>DHL Express: EUR 35.00</strong>
+						</li>
+					</ul>
+					<div class="d-flex justify-content-between align-items-center font-weight-bold">
+						<span>Tổng Cộng</span>
+						<span th:text="'$' + ${total+35}">EUR 183.00</span>
+					</div>
+					<p class="mt-2 text-right text-muted small">Approx. 4,237,873 VND</p>
+				</div>
+				<div class="mt-2 text-right text-muted small">
+					<button type="submit">
+						Thanh Toán Ngay
+					</button>
+				</div>
+
+			</section>
+
+	</div>
+
+	<!-- Bootstrap JS and dependencies (Popper.js and jQuery) -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

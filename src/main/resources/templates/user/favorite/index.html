@@ -1,0 +1,51 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/user :: mylayout('Home Page', ~{this :: body})}">
+
+<body>
+	<header class="site-header section-padding d-flex justify-content-center align-items-center">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-12">
+					<h1>
+						<span class="d-block text-primary">Giỏ Hàng</span>
+						<span class="d-block text-dark">favorite stuffs</span>
+					</h1>
+				</div>
+			</div>
+		</div>
+	</header>
+	<div class="container p-2">
+		<div class="row  d-flex justify-content-center align-items-center">
+			<section class="products">
+				<div class="art-gallery">
+				            <!-- Art Item 1 -->
+							<div class="row">
+							           <!-- Art Item 1 -->
+							           <div class="col-md-4 mb-4" th:each="poster,i : ${favorites}">
+							               <div class="card text-center">
+							                   <img  th:src="${poster.image}" class="card-img-top" alt="Artwork 1">
+							                   <div class="card-body">
+							                       <h5 class="card-title" th:text="${poster.name}"></h5>
+							                       <p class="card-text font-weight-bold" th:text="${poster.price} + ' $'">EUR 43.00</p>
+							                       <select class="form-control mb-3" >
+							                           <option>Select size</option>
+													   <th:block th:each="s, i :  ${poster.sizes}">
+													   		<option th:value="${s.id}" th:text="${s.name}"></option>
+													   	</th:block>
+							                       </select>
+							                       <button class="btn btn-dark btn-block">Add to Bag</button>
+							                   </div>
+							               </div>
+							           </div>
+
+							       <div class="text-center">
+							           <button class="btn btn-dark btn-lg">Add All Items to Bag</button>
+							       </div>
+				        </div>
+
+				 
+			</section>
+		</div>
+		<div>
+</body>
+
+</html>

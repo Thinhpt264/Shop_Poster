@@ -1,0 +1,23 @@
+<html  xmlns:th="http://www.thymeleaf.org">
+	     <link href="${pageContext.request.contextPath}/assets/user/css/style.css" rel="stylesheet">
+	  
+	        <div id="preloader"></div>
+	    
+	  <form id="myForm" th:action="@{/payment/pay}" method="post">
+	  	Amount: <input type="hidden" name="amount" th:value="${total}">
+		<input type="hidden" name="orderId" th:value="${orderId}">
+	  	<input type="submit" value="submit">
+	  </form>
+	  <script>
+	        function submitForm() {
+	            document.getElementById("myForm").submit();
+	        }
+
+	        // Gửi biểu mẫu sau khi trang đã tải xong
+	        window.onload = function() {
+				  submitForm();
+	        };
+	    </script>
+	  
+	  
+</html>

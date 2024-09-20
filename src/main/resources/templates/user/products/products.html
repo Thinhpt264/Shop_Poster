@@ -1,0 +1,406 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/user :: mylayout('Product Page', ~{this :: body})}">
+
+<body>
+
+
+	<style>
+		.love {
+			color: var(--primary-color);
+		}
+	</style>
+	<header class="site-header section-padding	">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-10 col-12">
+					<h1>
+						<span class="d-block text-primary">Lựa Chọn</span>
+						<span class="d-block text-dark">Poster Yêu Thích</span>
+					</h1>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<div class="container p-2">
+		<div class="row  d-flex justify-content-center align-items-center">
+
+			<div class="row">
+
+				<div class="col-2">
+					<select class="form-select cart-form-select" id="size_select" name="size"
+						style="outline: none; border: none;">
+						<option th:value="-1">Size</option>
+						<option th:each="s, i : ${sizes}" th:text="${s.name}" th:value="${s.id}"> </option>
+					</select>
+				</div>
+				<div class="col-2">
+					<select class="form-select cart-form-select" name="frame" id="frame_select"
+						style="outline: none; border: none;">
+						<option>Frame</option>
+						<option th:each="f, i : ${frames}" th:text="${f.name}" th:value="${f.id}"> </option>
+					</select>
+				</div>
+				<div class="col-2">
+					<select class="form-select cart-form-select" style="outline: none; border: none;">
+						<option>Nghệ Sĩ</option>
+						<option th:each="s, i : ${sizes}" th:text="${s.name}" value="${s.id}"> </option>
+					</select>
+				</div>
+
+				<div class="col-2">
+
+					<button id="startButton">Bắt đầu nhận diện</button>
+
+					<input type="hidden" value="" id="keyword" name="keyword">
+					<p id="result"></p>
+					<input type="submit" value="search" id="search" />
+
+					<script>
+						document.getElementById('startButton').addEventListener('click', () => {
+							const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+							recognition.lang = 'vi-VN';
+							recognition.interimResults = false;
+							recognition.maxAlternatives = 1;
+
+							recognition.start();
+
+							recognition.onresult = (event) => {
+								const transcript = event.results[0][0].transcript;
+								document.getElementById('result').textContent = 'Kết quả: ' + transcript;
+								document.getElementById('keyword').value = transcript;
+							};
+
+
+							recognition.onend = () => {
+								alert('da nhan dien xong');
+							};
+						});
+
+						document.getElementById('search').addEventListener('click', () => {
+
+							var keyword = document.getElementById('keyword').value;
+							$.ajax({
+								type: "POST",
+								url: "/products/searchByKeyword",
+								data: {
+									keyword: keyword
+								},
+								success: function (data) {
+									console.log("test");
+									var s = '';
+									for (var i = 0; i < data.length; i++) {
+										var product = data[i];
+										s += '<div class="col-lg-4 col-12 mb-3">';
+										s += '  <div class="product-thumb">';
+										s += '    <a href="/products/detail/' + product.id + '">';
+										s += '      <img src="' + product.image + '" class="img-fluid product-image" alt="">';
+										s += '    </a>';
+										s += '    <div class="product-top d-flex">';
+										s += '      <span class="product-alert me-auto">' + product.categories.name + '</span>';
+										s += '      <a href="" class="bi-heart-fill product-icon"></a>';
+										s += '    </div>';
+										s += '    <div class="product-info d-flex">';
+										s += '      <div>';
+										s += '        <h5 class="product-title mb-0">';
+										s += '          <a href="/products/detail/' + product.id + '" class="product-title-link">' + product.name + '</a>';
+										s += '        </h5>';
+										s += '        <p class="product-p">Original package design from house</p>';
+										s += '      </div>';
+										s += '      <small class="product-price text-muted ms-auto">' + product.price + ' $</small>';
+										s += '    </div>';
+										s += '  </div>';
+										s += '</div>';
+
+									}
+									$('.products .row-product').html(s);
+								}
+
+							})
+
+						})
+					</script>
+				</div>
+			</div>
+
+
+			<script>
+				document.getElementById('size_select').addEventListener('change', function () {
+					var sizeId = this.value;
+
+					console.log(sizeId);
+					$.ajax({
+
+						type: "GET",
+						url: "/products/findBySizeId",
+						data: {
+							size_id: sizeId,
+						},
+						success: function (data) {
+							console.log("test");
+							var s = '';
+							for (var i = 0; i < data.length; i++) {
+								var product = data[i];
+								s += '<div class="col-lg-4 col-12 mb-3">';
+								s += '  <div class="product-thumb">';
+								s += '    <a href="/products/detail/' + product.id + '">';
+								s += '      <img src="' + product.image + '" class="img-fluid product-image" alt="">';
+								s += '    </a>';
+								s += '    <div class="product-top d-flex">';
+								s += '      <span class="product-alert me-auto">' + product.categories.name + '</span>';
+								s += '      <a href="" class="bi-heart-fill product-icon"></a>';
+								s += '    </div>';
+								s += '    <div class="product-info d-flex">';
+								s += '      <div>';
+								s += '        <h5 class="product-title mb-0">';
+								s += '          <a href="/products/detail/' + product.id + '" class="product-title-link">' + product.name + '</a>';
+								s += '        </h5>';
+								s += '        <p class="product-p">Original package design from house</p>';
+								s += '      </div>';
+								s += '      <small class="product-price text-muted ms-auto">' + product.price + ' $</small>';
+								s += '    </div>';
+								s += '  </div>';
+								s += '</div>';
+
+							}
+							$('.products .row-product').html(s);
+						},
+						error: function (error) {
+							console.error('Error fetching posters:', error);
+						}
+
+					})
+
+				})
+
+				document.getElementById('frame_select').addEventListener('change', function () {
+					var frameId = this.value;
+
+					console.log(frameId);
+					$.ajax({
+
+						type: "GET",
+						url: "/products/findByFrameId",
+						data: {
+							frame_id: frameId,
+						},
+						success: function (data) {
+							console.log("test");
+							var e = '';
+							for (var i = 0; i < data.length; i++) {
+								var product = data[i];
+								e += '<div class="col-lg-4 col-12 mb-3">';
+								e += '  <div class="product-thumb">';
+								e += '    <a href="/products/detail/' + product.id + '">';
+								e += '      <img src="' + product.image + '" class="img-fluid product-image" alt="">';
+								e += '    </a>';
+								e += '    <div class="product-top d-flex">';
+								e += '      <span class="product-alert me-auto">' + product.categories.name + '</span>';
+								e += '      <a href="" class="bi-heart-fill product-icon"></a>';
+								e += '    </div>';
+								e += '    <div class="product-info d-flex">';
+								e += '      <div>';
+								e += '        <h5 class="product-title mb-0">';
+								e += '          <a href="/products/detail/' + product.id + '" class="product-title-link">' + product.name + '</a>';
+								e += '        </h5>';
+								e += '        <p class="product-p">Original package design from house</p>';
+								e += '      </div>';
+								e += '      <small class="product-price text-muted ms-auto">' + product.price + ' $</small>';
+								e += '    </div>';
+								e += '  </div>';
+								e += '</div>';
+
+							}
+							$('.products .row-product').html(e);
+						},
+						error: function (error) {
+							console.error('Error fetching posters:', error);
+						}
+
+					})
+
+				})
+			</script>
+
+
+			<script>
+				function showToast(message) {
+					var toastElement = document.getElementById('favoriteToast');
+					var toastBody = toastElement.querySelector('.toast-body');
+					toastBody.textContent = message;
+
+					// Tăng z-index để hiển thị toast trên tất cả các phần tử khác
+					var toastContainer = toastElement.parentElement;
+					toastContainer.style.zIndex = 9999; // Giá trị cao hơn để hiển thị trên các phần tử khác
+
+					var toast = new bootstrap.Toast(toastElement);
+					toast.show();
+
+					// Đặt lại z-index sau khi toast ẩn
+					toastElement.addEventListener('hidden.bs.toast', function () {
+						toastContainer.style.zIndex = -1; // Giá trị thấp hơn khi toast không hiển thị
+					});
+				}
+
+
+				function toggleFavorite(event, element) {
+					event.preventDefault();
+					var productId = element.getAttribute('data-id');
+					console.log(productId);
+
+					var isFavorite = element.classList.contains('love');
+
+					var url = isFavorite ? '/favorite/remove' : '/favorite/add';
+					$.ajax({
+
+						type: 'POST',
+						url: url,
+						data: {productId: productId},
+						success: function (data) {
+							if (data) {
+								// Cập nhật giao diện sau khi thêm/xóa thành công
+								console.log(data)
+								if (isFavorite) {
+									element.classList.remove('love');
+									showToast('Đã xóa khỏi yêu thích!');
+								} else {
+									element.classList.add('love');
+									showToast('Đã thêm vào yêu thích!');
+								}
+							}
+						},
+						error: function (error) {
+							console.error('Có lỗi xảy ra:', error);
+							alert('Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại sau.');
+						}
+					})
+				}
+			</script>
+		</div>
+	</div>
+	<section class="products">
+		<div class="container">
+			<div class="row ">
+				<div class="col-12">
+					<h2 class="mb-5">Sản Phẩm Mới</h2>
+				</div>
+			</div>
+			<div class="row row-product">
+				<div class="col-lg-4 col-12 mb-3" th:each="product, i : ${posters}">
+					<div class="product-thumb">
+						<a th:href="@{'/products/detail/'+ ${product.id}}">
+							<img th:src="${product.image}" class="img-fluid product-image" alt="">
+						</a>
+
+						<div class="product-top d-flex">
+							<span class="product-alert me-auto" th:text="${product.categories.name}"></span>
+
+							<a class="bi-heart-fill product-icon love" th:if="${#lists.contains(favorites, product)}"
+								th:data-id="${product.id}" onclick="toggleFavorite(event, this)"></a>
+							<a class="bi-heart-fill product-icon " th:unless="${#lists.contains(favorites, product)}"
+								th:data-id="${product.id}" onclick="toggleFavorite(event, this)"></a>
+						</div>
+						<div class="product-info d-flex">
+							<div>
+								<h5 class="product-title mb-0">
+									<a th:href="@{'/products/detail/'+ ${product.id}}" class="product-title-link"
+										th:text="${product.name}"></a>
+								</h5>
+
+								<p class="product-p">Original package design from house</p>
+							</div>
+
+							<small class="product-price text-muted ms-auto" th:text="${product.price} + '$'"></small>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-12">
+				<h2 class="mb-5">Popular</h2>
+			</div>
+
+			<div class="col-lg-4 col-12 mb-3">
+				<div class="product-thumb">
+					<a href="product-detail.html">
+						<img src="images/product/team-fredi-8HRKoay8VJE-unsplash.jpeg" class="img-fluid product-image"
+							alt="">
+					</a>
+
+					<div class="product-top d-flex">
+						<span class="product-alert">Trending</span>
+
+						<a href="#" class="bi-heart-fill product-icon ms-auto"></a>
+					</div>
+
+					<div class="product-info d-flex">
+						<div>
+							<h5 class="product-title mb-0">
+								<a href="product-detail.html" class="product-title-link">Package</a>
+							</h5>
+
+							<p class="product-p">Original package design from house</p>
+						</div>
+
+						<small class="product-price text-muted ms-auto">$50</small>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-12 mb-3">
+				<div class="product-thumb">
+					<a href="product-detail.html">
+						<img src="images/product/quokkabottles-kFc1_G1GvKA-unsplash.jpeg"
+							class="img-fluid product-image" alt="">
+					</a>
+
+					<div class="product-top d-flex">
+						<a href="#" class="bi-heart-fill product-icon ms-auto"></a>
+					</div>
+
+					<div class="product-info d-flex">
+						<div>
+							<h5 class="product-title mb-0">
+								<a href="product-detail.html" class="product-title-link">Bottle</a>
+							</h5>
+
+							<p class="product-p">Package design</p>
+						</div>
+
+						<small class="product-price text-muted ms-auto">$100</small>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-12 mb-3">
+				<div class="product-thumb">
+					<a href="product-detail.html">
+						<img src="images/product/anis-m-WnVrO-DvxcE-unsplash.jpeg" class="img-fluid product-image"
+							alt="">
+					</a>
+
+					<div class="product-top d-flex">
+						<a href="#" class="bi-heart-fill product-icon ms-auto"></a>
+					</div>
+
+					<div class="product-info d-flex">
+						<div>
+							<h5 class="product-title mb-0">
+								<a href="product-detail.html" class="product-title-link">Medicine</a>
+							</h5>
+
+							<p class="product-p">Original design from house</p>
+						</div>
+
+						<small class="product-price text-muted ms-auto">$200</small>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		</div>
+	</section>
+</body>
+
+</html>
