@@ -10,4 +10,6 @@ public interface AccountService  extends UserDetailsService {
 	public boolean save(Account account);
 	
 	public Account findByEmail(String email);
+	
+	public Account findByUserName(String username);
 }

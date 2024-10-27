@@ -1,0 +1,128 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/admin :: mylayout('Home Page', ~{this :: body})}">
+
+<body>
+	<!-- start page title -->
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box">
+				<div class="page-title-right">
+					<form class="form-inline">
+						<div class="form-group">
+							<div class="input-group">
+								<input type="text" class="form-control form-control-light" id="dash-daterange">
+								<div class="input-group-append">
+									<span class="input-group-text bg-primary border-primary text-white">
+										<i class="mdi mdi-calendar-range font-13"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+						<a class="btn btn-primary ml-2">
+							<i class="mdi mdi-autorenew"></i>
+						</a>
+						<a  class="btn btn-primary ml-1">
+							<i class="mdi mdi-filter-variant"></i>
+						</a>
+					</form>
+				</div>
+				<h4 class="page-title">Dashboard</h4>
+			</div>
+		</div>
+	</div>
+	<!-- end page title -->
+	<div class="row">
+	                            <div class="col-12">
+	                                <div class="card">
+	                                    <div class="card-body">
+	                                        <div class="row mb-2">
+	                                            <div class="col-lg-8">
+	                                                <form class="form-inline">
+	                                                    <div class="form-group mb-2">
+	                                                        <label for="inputPassword2" class="sr-only">Search</label>
+	                                                        <input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
+	                                                    </div>
+	                                                    <div class="form-group mx-sm-3 mb-2">
+	                                                        <label for="status-select" class="mr-2">Status</label>
+	                                                        <select class="custom-select" id="status-select">
+	                                                            <option selected="">Choose...</option>
+	                                                            <option value="1">Paid</option>
+	                                                            <option value="2">Awaiting Authorization</option>
+	                                                            <option value="3">Payment failed</option>
+	                                                            <option value="4">Cash On Delivery</option>
+	                                                            <option value="5">Fulfilled</option>
+	                                                            <option value="6">Unfulfilled</option>
+	                                                        </select>
+	                                                    </div>
+	                                                </form>                            
+	                                            </div>
+	                                            <div class="col-lg-4">
+	                                                <div class="text-lg-right">
+	                                                    <button type="button" class="btn btn-danger mb-2 mr-2"><i class="mdi mdi-basket mr-1"></i> Add New Order</button>
+	                                                    <button type="button" class="btn btn-light mb-2">Export</button>
+	                                                </div>
+	                                            </div><!-- end col-->
+	                                        </div>
+	                
+	                                        <div class="table-responsive">
+	                                            <table class="table table-centered mb-0">
+	                                                <thead class="thead-light">
+	                                                    <tr>
+	                                                        <th style="width: 20px;">
+	                                                            <div class="custom-control custom-checkbox">
+	                                                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+	                                                                <label class="custom-control-label" for="customCheck1">&nbsp;</label>
+	                                                            </div>
+	                                                        </th>
+	                                                        <th>Order ID</th>
+	                                                        <th>Date</th>
+	                                                        <th>Payment Status</th>
+	                                                        <th>Total</th>
+	                                                        <th>Payment Method</th>
+	                                                        <th>Order Status</th>
+	                                                        <th style="width: 125px;">Action</th>
+	                                                    </tr>
+	                                                </thead>
+	                                                <tbody>
+	                                                    <tr  th:each="o, i : ${orders}">
+	                                                        <td>
+	                                                            <div class="custom-control custom-checkbox">
+	                                                                <input type="checkbox" class="custom-control-input" id="customCheck2">
+	                                                                <label class="custom-control-label" for="customCheck2">&nbsp;</label>
+	                                                            </div>
+	                                                        </td>
+	                                                        <td><a href="apps-ecommerce-orders-details.html" class="text-body font-weight-bold" th:text="${o.id}"></a> </td>
+	                                                        <td >
+	                                                            <th:block > <p th:text="${#dates.format(o.payment.created, 'dd/MM/yyyy')}"></p>  </th:block> <small class="text-muted"  th:text="${#dates.format(o.payment.created, 'hh:mm a')}">10:29 PM</small>
+	                                                        </td>
+	                                                        <td>
+	                                                            <h5><span class="badge badge-success-lighten"><i class="mdi mdi-coin"></i> Paid</span></h5>
+	                                                        </td>
+															<td th:inline="text">
+	                                                            $ [[${#numbers.formatDecimal(o.payment.price, 0, 'COMMA', 2, 'POINT')}]]
+	                                                        </td>
+	                                                        <td th:text="${o.payment.paymentType == 1 ? 'Mastercard' : (o.payment.paymentType == 2 ? 'Momo' : ' VNPay')}">
+	                                                            Tiền Mặt
+	                                                        </td>
+	                                                        <td>
+	                                                            <h5><span class="badge badge-info-lighten">Shipped</span></h5>
+	                                                        </td>
+	                                                        <td>
+	                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
+	                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+	                                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+	                                                        </td>
+	                                                    </tr>
+	                                                    
+	                                                   
+	                                                    
+	                                                </tbody>
+	                                            </table>
+	                                        </div>
+	                                    </div> <!-- end card-body-->
+	                                </div> <!-- end card-->
+	                            </div> <!-- end col -->
+	                        </div>
+
+</body>
+
+</html>

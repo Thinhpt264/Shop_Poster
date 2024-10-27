@@ -38,20 +38,38 @@ public class SecurityConfigutation {
 						"/assets/**",
 						"/client_assets/**",
 						"payment/**"
-					).permitAll();
+					).permitAll()
+					.requestMatchers("/admin/**")
+					.hasAnyRole("ADMIN")
+					.requestMatchers("/admin_assets/**")
+					.permitAll()
+					;
+					
 				})
 				.formLogin(f-> {
 					f.loginPage("/login/index")
 					 .loginProcessingUrl("/login/process-login")
 					 .usernameParameter("username")
 					 .passwordParameter("password")
-					 .defaultSuccessUrl("/home/index", true)
+//					 .defaultSuccessUrl("/home/index", true)
+					 .successHandler(new AuthenticationSuccess())
 					 .failureUrl("/login/index?error")	
 					 ;
 				})
 				.logout(log -> {
 					log.logoutUrl("/login/logout")
 						.logoutSuccessUrl("/login/index");;
+					
+				})
+				.exceptionHandling(ex -> {
+					 ex.accessDeniedHandler((request, response, accessDeniedException) -> {
+			                if (!response.isCommitted()) {
+			                    response.sendRedirect("/home/accessDenied");  // Điều hướng đến trang lỗi
+			                }else {
+			                    // Ghi log hoặc xử lý nếu phản hồi đã được cam kết
+			                    System.out.println("Response was already committed.");
+			                }
+			            });
 					
 				})
 				.build();

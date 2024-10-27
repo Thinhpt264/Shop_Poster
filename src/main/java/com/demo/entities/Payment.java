@@ -34,6 +34,7 @@ public class Payment {
 	private double price;
 	
 	private int status;
+	
 
 	public Payment(int id, Order order, int paymentType, String transactionNo, String qR, Date created,
 			String description, double price, int status) {
@@ -68,9 +69,16 @@ public class Payment {
 	public int getPaymentType() {
 		return paymentType;
 	}
-
+	
 	public void setPaymentType(int paymentType) {
 		this.paymentType = paymentType;
+	}
+
+	@Override
+	public String toString() {
+		return "Payment [id=" + id  + ", paymentType=" + paymentType + ", transactionNo="
+				+ transactionNo + ", QR=" + QR + ", created=" + created + ", description=" + description + ", price="
+				+ price + ", status=" + status + "]";
 	}
 
 	public String getTransactionNo() {

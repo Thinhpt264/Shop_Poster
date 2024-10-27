@@ -9,6 +9,7 @@
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Custom CSS -->
 	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" th:href="@{/client_assets/css/style.css}">
 </head>
 <style>
 	h4 {
@@ -33,6 +34,94 @@
 	.order-summary .list-group-item {
 		border: none;
 	}
+	/* Styling for the payment method section */
+	.ltn__checkout-payment-method {
+	    background-color: #f9f9f9;
+	    padding: 30px;
+	    border-radius: 10px;
+	    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	}
+
+	.ltn__checkout-payment-method h4.title-2 {
+	    font-size: 22px;
+	    font-weight: bold;
+	    color: #333;
+	    margin-bottom: 20px;
+	}
+
+	/* Styling for payment method cards */
+	.ltn__checkout-payment-method .card {
+	    margin-bottom: 15px;
+	    border: 1px solid #ddd;
+	    border-radius: 10px;
+	    transition: all 0.3s ease-in-out;
+	}
+
+	.ltn__checkout-payment-method .card:hover {
+	    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	}
+
+	.ltn__checkout-payment-method .card label {
+	    display: flex;
+	    align-items: center;
+	    justify-content: space-between;
+	    padding: 15px 20px;
+	    cursor: pointer;
+	    font-weight: bold;
+	    font-size: 16px;
+	    color: #333;
+	    transition: background-color 0.3s ease-in-out;
+	}
+
+	.ltn__checkout-payment-method .card input[type="radio"] {
+	    margin-left: 10px;
+	}
+
+	.ltn__checkout-payment-method .card label:hover {
+	    background-color: #f0f0f0;
+	}
+
+	.ltn__checkout-payment-method .card img {
+	    width: 40px;
+	    height: 40px;
+	    margin-right: 10px;
+	}
+
+	.ltn__checkout-payment-method .card-body {
+	    padding: 10px 20px;
+	    background-color: #fff;
+	    border-top: 1px solid #ddd;
+	    border-radius: 0 0 10px 10px;
+	}
+
+	/* Customizing button */
+	.ltn__checkout-payment-method .btn {
+	    background-color: #28a745;
+	    color: #fff;
+	    padding: 12px 25px;
+	    font-size: 16px;
+	    border-radius: 5px;
+	    transition: background-color 0.3s ease-in-out;
+	    border: none;
+	}
+
+	.ltn__checkout-payment-method .btn:hover {
+	    background-color: #218838;
+	}
+
+	.ltn__checkout-payment-method .ltn__payment-note {
+	    font-size: 14px;
+	    color: #666;
+	}
+
+	.ltn__checkout-payment-method .alert {
+	    font-size: 14px;
+	    color: #721c24;
+	    background-color: #f8d7da;
+	    border-color: #f5c6cb;
+	    margin-top: 10px;
+	    padding: 10px 15px;
+	}
 </style>
 
 <body>
@@ -45,7 +134,7 @@
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label for="firstName">First Name *</label>
-						<input type="text" class="form-control" name="firstName" id="firstName"  required>
+						<input type="text" class="form-control" name="firstName" id="firstName" required>
 					</div>
 					<div class="form-group col-md-6">
 						<label for="lastName">Last Name *</label>
@@ -62,7 +151,7 @@
 				</div>
 				<div class="form-group">
 					<label for="country">Country *</label>
-					<select id="country" name="country"  class="form-control">
+					<select id="country" name="country" class="form-control">
 						<option selected value="vi">Vietnam</option>
 						<option value="us">United States</option>
 						<option value="uk">United Kingdom</option>
@@ -70,7 +159,7 @@
 						<!-- Add more countries as needed -->
 					</select>
 				</div>
-				<div class="form-group" >
+				<div class="form-group">
 					<label for="address1">Address 1 (Street name / House number / Floor) *</label>
 					<input type="text" name="address1" class="form-control" id="address1" required>
 				</div>
@@ -98,6 +187,7 @@
 					<label for="orderNotes">Notes about your order:</label>
 					<textarea class="form-control" name="notes" id="orderNotes" rows="3"></textarea>
 				</div>
+
 			</section>
 
 			<!-- Order Summary Section -->
@@ -129,11 +219,73 @@
 					</div>
 					<p class="mt-2 text-right text-muted small">Approx. 4,237,873 VND</p>
 				</div>
-				<div class="mt-2 text-right text-muted small">
-					<button type="submit">
-						Thanh Toán Ngay
-					</button>
-				</div>
+					<div class="ltn__checkout-payment-method mt-50">
+						<h4 class="title-2">Phương thức thanh toán (chọn 1 phương thưc thanh toán)</h4>
+						<div id="checkout_accordion_1">
+							<div class="card">
+								<label style="font-weight: bold; font-size: 16px" class="ltn__card-title">
+									Thanh toán khi nhận hàng
+									<img th:src="@{/client_assets/shop_assets/img/icons/cash.png}" alt="#">
+									<input type="radio" checked name="payOption" value="cash">
+								</label>
+								<div id="faq-item-2-2" class="collapse">
+									<div class="card-body">
+										<p>Thanh toán bằng tiền mặt khi nhận hàng</p>
+									</div>
+								</div>
+							</div>
+							<div class="card">
+								<label style="font-weight: bold; font-size: 16px" class="collapsed ltn__card-title">
+									Thanh toán qua PayPal
+									<img style="margin-right: 30px"
+										th:src="@{/client_assets/shop_assets/img/icons/payment-3.png}" alt="#">
+									<input type="radio" name="payOption" value="paypal">
+								</label>
+								<div class="collapse">
+									<div class="card-body">
+										<p>Thanh toán qua PayPal, bạn có thể thanh toán qua Momo, VnPay nếu bạn không có
+											tài khoản PayPal.</p>
+									</div>
+								</div>
+							</div>
+							<div class="card">
+								<label style="font-weight: bold; font-size: 16px" class="collapsed ltn__card-title">
+									Thanh toán qua Momo
+									<img style="margin-right: 30px"
+										th:src="@{/client_assets/shop_assets/img/icons/momo.png}" alt="#">
+									<input type="radio" name="payOption" value="momo">
+								</label>
+								<div class="collapse">
+									<div class="card-body">
+										<p>Thanh toán qua Momo, bạn có thể thanh toán qua VNPay, Paypal nếu bạn không có
+											tài khoản Momo.</p>
+									</div>
+								</div>
+							</div>
+							<div class="card">
+								<label style="font-weight: bold; font-size: 16px" class="collapsed ltn__card-title">
+									Thanh toán qua VNPay
+									<img th:src="@{/client_assets/shop_assets/img/icons/vnpay.png}" alt="#">
+									<input type="radio" value="vnpay" name="payOption">
+								</label>
+								<div class="collapse">
+									<div class="card-body">
+										<p>Thanh toán qua VNPay, bạn có thể thanh toán qua Momo, Paypal nếu bạn không có
+											tài khoản VNPay.</p>
+									</div>
+								</div>
+							</div>
+							<div style="margin-top: 5px" th:if="${message}" class="alert alert-danger"
+								th:text="${message}">
+							</div>
+						</div>
+						<div class="ltn__payment-note mt-30 mb-30">
+							<p>Dữ liệu cá nhân của bạn sẽ được sử dụng để xử lý đơn đặt hàng.</p>
+						</div>
+						<button class="btn theme-btn-1 btn-effect-1 text-uppercase" type="submit">Đặt hàng</button>
+					</div>
+				
+				
 
 			</section>
 

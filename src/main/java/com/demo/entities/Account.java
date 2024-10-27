@@ -19,7 +19,7 @@ public class Account {
 	private boolean status;
 	@Column(name = "email")
 	private String email;
-	@Column(name = "SecurityCode")
+	@Column(name = "security_code")
 	private String SecurityCode;
     @ManyToOne
     @JoinColumn(name = "role")

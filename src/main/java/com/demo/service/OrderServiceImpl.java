@@ -1,5 +1,7 @@
 package com.demo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,12 @@ public class OrderServiceImpl implements OrderService {
 	public Order findById(int id) {
 		// TODO Auto-generated method stub
 		return orderRepository.findById(id);
+	}
+	
+	@Override
+	public List<Order> finđAll() {
+		// TODO Auto-generated method stub
+		return orderRepository.findAll();
 	}
 	
 }

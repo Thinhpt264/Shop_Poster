@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.demo.entities.Item;
@@ -56,15 +57,21 @@ public class CheckoutController {
 		}	
 	}
 	@PostMapping("payment")
-	public String paymentInfo(@ModelAttribute("order") Order o, HttpSession session, ModelMap modelMap ) {
+	public String paymentInfo(@ModelAttribute("order") Order o, @RequestParam("payOption") String payOption,  HttpSession session, ModelMap modelMap ) {
 		System.out.println(o);
+		System.out.println(payOption);
 		if(orderService.save(o)) {
+			
 			int orderId = o.getId();
 			List<Item> cart = (List<Item>) session.getAttribute("cart");
 			int total = (int) CartHelper.total(cart);
 			modelMap.put("orderId", orderId);
 			modelMap.put("total", total);
-			return "user/checkout/repayment";
+			if(payOption.equalsIgnoreCase("vnpay")) {
+				return "user/checkout/repayment";
+			}
+			return  "user/checkout/repayment";
+			
 		}else {
 			return "redirect:/products/index";
 		}

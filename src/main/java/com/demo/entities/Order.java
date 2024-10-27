@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -31,6 +33,10 @@ public class Order {
 	private String postCode;
 	@Column(name = "notes")
 	private String notes;
+	
+	@OneToOne(mappedBy = "order")
+	private Payment payment;
+	
 	public Order(int id, String lastName, String firstName, String phone, String email, String country,
 			String address1, String address2, String postCode, String notes) {
 		super();
@@ -96,6 +102,12 @@ public class Order {
 	public String getPostCode() {
 		return postCode;
 	}
+	public Payment getPayment() {
+		return payment;
+	}
+	public void setPayment(Payment payment) {
+		this.payment = payment;
+	}
 	public void setPostCode(String postCode) {
 		this.postCode = postCode;
 	}
@@ -109,7 +121,7 @@ public class Order {
 	public String toString() {
 		return "order [id=" + id + ", lastName=" + lastName + ", firstName=" + firstName + ", phone=" + phone
 				+ ", email=" + email + ", country=" + country + ", address1=" + address1 + ", address2=" + address2
-				+ ", postCode=" + postCode + ", notes=" + notes + "]";
+				+ ", postCode=" + postCode + ", notes=" + notes + "]" + payment ;
 	}
 	public Order() {
 		super();

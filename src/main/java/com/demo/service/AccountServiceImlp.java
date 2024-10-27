@@ -76,6 +76,12 @@ public class AccountServiceImlp implements AccountService {
 		// TODO Auto-generated method stub
 		return accountRepository.findByEmail(email);
 	}
+
+	@Override
+	public Account findByUserName(String username) {
+		// TODO Auto-generated method stub
+		return accountRepository.findByUserName(username);
+	}
 	
 	
 

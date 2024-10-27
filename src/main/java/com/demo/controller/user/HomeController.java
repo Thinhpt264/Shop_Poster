@@ -18,4 +18,9 @@ public class HomeController {
 		return "user/home/index";
 	}
 	
+	@GetMapping({"accessDenied"})
+	public String accessDenied(ModelMap modelMap) {
+		return "user/home/accessDenied";
+	}
+	
 }
